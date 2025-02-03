@@ -104,3 +104,72 @@ class TestProductModel(unittest.TestCase):
     #
     # ADD YOUR TEST CASES HERE
     #
+ def test_update_product(self):
+    """It should update an existing product"""
+    product = ProductFactory()
+    product.create()
+    updated_product = Product.query.get(product.id)
+    updated_product.name = "Updated Fedora"
+    updated_product.description = "A stylish red hat"
+    updated_product.price = 15.00
+    updated_product.available = False
+    updated_product.update()
+    fetched_product = Product.query.get(product.id)
+    self.assertEqual(fetched_product.name, "Updated Fedora")
+    self.assertEqual(fetched_product.description, "A stylish red hat")
+    self.assertEqual(Decimal(fetched_product.price), 15.00)
+    self.assertEqual(fetched_product.available, False)
+
+def test_delete_product(self):
+    """It should delete an existing product"""
+    product = ProductFactory()
+    product.create()
+    product_id = product.id
+    product.delete()
+    deleted_product = Product.query.get(product_id)
+    self.assertIsNone(deleted_product)
+    
+def test_list_all_products(self):
+    """It should list all products"""
+    products = Product.all()
+    self.assertEqual(len(products), 0)
+    product = ProductFactory()
+    product.create()
+    products = Product.all()
+    self.assertEqual(len(products), 1)
+    
+def test_find_product_by_name(self):
+    """It should find a product by name"""
+    product_name = "Fedora"
+    product = ProductFactory(name=product_name)
+    product.create()
+    product_found = Product.find_by_name(product_name)
+    self.assertEqual(product_found, product)
+    
+def test_find_product_by_category(self):
+    """It should find a product by category"""
+    category = Category.CLOTHS
+    product = ProductFactory(category=category)
+    product.create()
+    products_found = Product.find_by_category(category)
+    self.assertEqual(products_found[0], product)
+    
+def test_find_product_by_availability(self):
+    """It should find a product by availability"""
+    availability = True
+    product = ProductFactory(available=availability)
+    product.create()
+    products_found = Product.find_by_availability(availability)
+    self.assertEqual(products_found[0], product)
+
+def test_read_product(self):
+    """It should read a product from the database"""
+    product = ProductFactory()
+    product.create()
+    retrieved_product = Product.query.get(product.id)
+    self.assertEqual(retrieved_product.id, product.id)
+    self.assertEqual(retrieved_product.name, product.name)
+    self.assertEqual(retrieved_product.description, product.description)
+    self.assertEqual(retrieved_product.price, product.price)
+    self.assertEqual(retrieved_product.available, product.available)
+    self.assertEqual(retrieved_product.category, product.category)
